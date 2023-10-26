@@ -1,0 +1,3 @@
+interface IBriefImage {
+  path: string;
+}
