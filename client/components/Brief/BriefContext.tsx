@@ -1,5 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
+import { IRequestBrief } from "@/types/brief.types";
 
 export const BriefContext = createContext<
-  [IResponseBrief, Dispatch<SetStateAction<IResponseBrief>>]
->([{} as IResponseBrief, () => {}]);
+  [IRequestBrief, Dispatch<SetStateAction<IRequestBrief>>]
+>([{} as IRequestBrief, () => {}]);

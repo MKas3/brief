@@ -1,33 +1,59 @@
 {
   "tags": [
-    "Лого",
-    "Однотонный",
-    "Мультяшный",
-    "Абстрактный",
-    "Футуристический",
-    "Минималистичный",
-    "Геометрический",
-    "Винтажный",
-    "Ретро",
-    "Текстовый",
-    "Индустриальный",
-    "Рисованный",
-    "3D",
-    "Графический",
-    "Символический",
-    "Яркий",
-    "Технологичный",
-    "Игровой",
-    "Музыкальный",
-    "Естественный",
-    "Спортивный",
-    "Финансовый",
-    "Автомобильный",
-    "Пищевой",
-    "Медицинский",
-    "Электронный",
-    "Космический",
-    "Туристический",
-    "Образовательный"
+    {
+      "title": "Лого",
+      "tagName": "logo",
+      "required": true
+    },
+    {
+      "title": "Однотонный",
+      "tagName": "solid",
+      "required": false
+    },
+    {
+      "title": "Мультяшный",
+      "tagName": "cartoon",
+      "required": false
+    },
+    {
+      "title": "Абстрактный",
+      "tagName": "abstract",
+      "required": false
+    },
+    {
+      "title": "Футуристический",
+      "tagName": "futuristic",
+      "required": false
+    },
+    {
+      "title": "Минималистичный",
+      "tagName": "minimalistic",
+      "required": false
+    },
+    {
+      "title": "Ретро",
+      "tagName": "retro",
+      "required": false
+    },
+    {
+      "title": "Текстовый",
+      "tagName": "text",
+      "required": false
+    },
+    {
+      "title": "Рисованный",
+      "tagName": "drawn",
+      "required": false
+    },
+    {
+      "title": "3D",
+      "tagName": "3D",
+      "required": false
+    },
+    {
+      "title": "Яркий",
+      "tagName": "bright",
+      "required": false
+    }
   ]
 }

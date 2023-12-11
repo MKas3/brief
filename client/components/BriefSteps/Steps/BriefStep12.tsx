@@ -10,7 +10,7 @@ export default function BriefStep12() {
     <BriefStep
       stepsLeftText='Финишная прямая'
       imageSource='/steps/step12.png'
-      imageClassName='-top-[10rem] -right-[14.5rem] h-auto w-auto'
+      imageClassName='-top-[10rem] -right-[14.5rem] h-auto w-auto sm:scale-90 sm:translate-y-[-10%]'
       nextForm='step-12'
     >
       <p className='text-center text-xl font-medium'>Проверьте ваш бриф</p>

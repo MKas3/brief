@@ -12,8 +12,10 @@ export class BriefImageAuthorGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
-    const user = req.user;
-    if (!user) return false;
-    return await this.userService.hasBriefImage(user.id, +req.params.id);
+    if (!req.user.id && !req.linkData.id) return false;
+    let userId = +req.user.id;
+    if (!req.user.id)
+      userId = (await this.userService.findByBrief(+req.linkData.id)).id;
+    return await this.userService.hasBriefImage(userId, +req.params.id);
   }
 }

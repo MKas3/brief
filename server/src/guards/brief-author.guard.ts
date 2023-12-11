@@ -12,8 +12,11 @@ export class BriefAuthorGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
-    const user = req.user;
-    if (!user || !req.params.id) return false;
-    return await this.userService.hasBrief(user.id, +req.params.id);
+    if (!req.user.id && !req.linkData.id) return false;
+    let userId = +req.user.id;
+    const briefId = +(req.params.id ?? req.linkData.id);
+    if (!req.user.id)
+      userId = (await this.userService.findByBrief(+req.linkData.id)).id;
+    return await this.userService.hasBrief(userId, briefId);
   }
 }

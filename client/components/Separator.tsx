@@ -14,7 +14,7 @@ export default function Separator({
 }: SeparatorProps) {
   return (
     <div
-      className={(className ? `${className} ` : '') + 'flex h-fit w-full'}
+      className={(className ? `${className} ` : '') + 'flex h-fit w-1/2'}
       {...otherProps}
     >
       <span className='relative w-full'>

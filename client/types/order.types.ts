@@ -1,4 +1,5 @@
 import { Price } from '@/types/price.types';
+import { Progress } from "@/types/progress.types";
 
 export interface IRequestUpdateOrder {
   price: Price;

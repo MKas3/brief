@@ -53,4 +53,8 @@ export class CreateBriefDto implements Prisma.BriefUpdateInput {
   @IsInt()
   @Min(1)
   lastAction?: number;
+
+  @IsOptional()
+  @IsString()
+  prompt?: string;
 }

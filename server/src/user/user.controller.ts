@@ -49,14 +49,14 @@ export class UserController {
     return this.userService.findOne({ id: +id });
   }
 
-  @Patch(':id')
+  @Patch()
   @UsePipes(new ValidationPipe({ whitelist: true }))
-  @UseGuards(JwtAuthGuard, UserExistenceGuard, UserAuthorGuard)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update({ id: +id }, updateUserDto);
+  @UseGuards(JwtAuthGuard, UserExistenceGuard)
+  update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update({ id: +req.user.id }, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete(':link')
   @UseGuards(JwtAuthGuard, UserExistenceGuard, UserAuthorGuard)
   remove(@Param('id') id: string) {
     return this.userService.remove({ id: +id });

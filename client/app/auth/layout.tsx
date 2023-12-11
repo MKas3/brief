@@ -9,7 +9,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='flex flex-col items-center justify-center bg-neutral-900'>
+    <div className='flex flex-col min-h-screen items-center justify-center bg-neutral-900'>
       <GoogleOAuthProvider
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ''}
       >

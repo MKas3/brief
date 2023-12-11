@@ -10,7 +10,7 @@ export default function BriefStep8() {
     <DefaultBriefStep<FormValues>
       stepsLeftText='Осталось 5 шагов'
       imageSource='/steps/step8.png'
-      imageClassName='-top-[20rem] -right-[14.5rem] h-auto w-auto'
+      imageClassName='-top-[20rem] -right-[14.5rem] h-auto w-auto sm:translate-y-1/3'
       formId='step-8'
       inputTitle='Какая у вас ценовая категория относительно конкурентов?'
       inputName='worth'

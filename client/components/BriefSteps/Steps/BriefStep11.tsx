@@ -1,7 +1,7 @@
 import BriefStep from '@/components/BriefSteps/BriefStep';
 import { Input } from '@/components/Input';
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal } from '@/components/Modal';
+import { ModalBase } from '@/components/Modal/ModalBase';
 import Tags from '@/components/BriefSteps/Tags/Tags';
 import TagsService from '@/services/tags.service';
 import BriefImages from '@/components/Brief/BriefImages';
@@ -11,12 +11,19 @@ import OpenaiService from '@/services/openai.service';
 import BriefImageService from '@/services/brief-image.service';
 import { useRecoilState } from 'recoil';
 import {
+  activeTagsState,
   briefImagesState,
+  briefLoadingState,
+  requiredTagsState,
   selectedBriefImagesState,
 } from '@/store/brief-images.recoil';
 import { BriefContext } from '@/components/Brief/BriefContext';
 import { useForm } from 'react-hook-form';
-import BriefService from '@/services/brief.service';
+import { useQuery } from 'react-query';
+import { BriefStepContext } from '@/components/BriefSteps/BriefStepContext';
+import { ITag } from '@/types/tag.types';
+import { briefLinkState, newBriefState } from '@/store/brief.recoil';
+import { IRequestBrief } from '@/types/brief.types';
 
 type FormValues = {
   prompt: string;
@@ -24,11 +31,63 @@ type FormValues = {
 
 export default function BriefStep11() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<ITag[]>([]);
+  const [link] = useRecoilState(briefLinkState);
+  const [activeTags] = useRecoilState(activeTagsState);
+  const [requiredTags] = useRecoilState(requiredTagsState);
   const [briefImages, setBriefImages] = useRecoilState(briefImagesState);
   const [selectedBriefImages] = useRecoilState(selectedBriefImagesState);
+  const [briefLoading, setBriefLoading] = useRecoilState(briefLoadingState);
   const [brief] = useContext(BriefContext);
+  const [page, setPage] = useContext(BriefStepContext);
   const { register, handleSubmit } = useForm<FormValues>();
+  const [prompt, setPrompt] = useState('');
+  const [mustGenerateImages, setMustGenerateImages] = useState(false);
+  const {
+    data: images,
+    isLoading,
+    refetch,
+  } = useQuery(
+    ['aiImages', prompt],
+    async () => await OpenaiService.GenerateImage(prompt, 4, '256x256'),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+    },
+  );
+  const [, setNewBrief] = useRecoilState(newBriefState);
+
+  const handleFinishModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const generateImages = async (data: FormValues) => {
+    if (briefImages.length >= MAX_AI_IMAGES || !data.prompt) return;
+
+    const promptTags = `${requiredTags
+      .map((el) => el.tagName)
+      .join(' ')} ${activeTags.map((el) => el.tagName).join(' ')} `;
+
+    setPrompt(promptTags + data.prompt);
+
+    setMustGenerateImages(true);
+
+    setBriefLoading(true);
+  };
+
+  const handleChange = async (data: FormValues) => {
+    const incorrect = brief.incorrect?.map((el, index) =>
+      index === 10 ? false : el,
+    );
+    setNewBrief((prev: IRequestBrief) => ({
+      ...prev,
+      lastAction: 11,
+      ...(incorrect && incorrect.length > 0 ? { incorrect } : null),
+    }));
+    setPage((prev) => prev + 1);
+  };
 
   useEffect(() => {
     const getTags = async () => {
@@ -37,49 +96,61 @@ export default function BriefStep11() {
     getTags();
   }, []);
 
-  const handleFinishModal = () => {
-    setIsModalVisible(false);
-  };
+  useEffect(() => {
+    if (!mustGenerateImages) return;
 
-  const generateImages = async (data: FormValues) => {
-    if (briefImages.length >= MAX_AI_IMAGES) return;
+    setMustGenerateImages(false);
 
-    const images = await OpenaiService.GenerateImage(data.prompt, 4, '256x256');
-    const newImages = images.map((el) => ({ path: el.url }));
+    refetch()
+      .then(async (data) => {
+        const images = data.data;
+        if (!images || !prompt) return;
 
-    for (const image of newImages)
-      await BriefImageService.create(brief.id, image);
+        setNewBrief((prev: IRequestBrief) => ({
+          lastAction: 11,
+          prompt: prompt.replace(/^.+? {3,}/g, ''),
+        }));
 
-    setBriefImages([...briefImages, ...newImages]);
+        const newImages = images.map((el) => ({ path: el.url }));
 
-    await BriefService.update(brief.id, { lastAction: 11 });
-  };
+        for (const image of newImages)
+          await BriefImageService.create(link, image);
+
+        setBriefImages([...briefImages, ...newImages]);
+      })
+      .finally(() => {
+        setBriefLoading(false);
+      });
+  }, [prompt, refetch]);
 
   return (
-    <BriefStep
-      stepsLeftText='Осталось 2 шага'
-      imageSource='/steps/step11.png'
-      imageClassName='-top-[10rem] -right-[14.5rem] h-auto w-auto'
-      nextForm='step-11'
-      description='*Чем точнее будет запрос, тем качественне будет результат'
-    >
-      <form
-        id='step-11'
-        onSubmit={handleSubmit(generateImages)}
-        className='flex h-full flex-row gap-x-4'
+    <>
+      <BriefStep
+        stepsLeftText='Осталось 2 шага'
+        imageSource='/steps/step11.png'
+        imageClassName='-top-[10rem] -right-[14.5rem] h-auto w-auto sm:scale-[80%]'
+        nextForm='step-11'
+        description='*Чем точнее будет запрос, тем качественне будет результат'
       >
-        <Input
-          onClick={() => setIsModalVisible(true)}
-          title='Введите запрос для генерации логотипа от нейросети.'
-          inputClassName='font-medium'
-          {...register('prompt', {
-            required: true,
-          })}
-        />
-        <Modal
-          visible={isModalVisible}
-          onClose={() => setIsModalVisible(false)}
+        <form
+          id='step-11'
+          onSubmit={handleSubmit(handleChange)}
+          className='flex h-full flex-row gap-x-4'
         >
+          <Input
+            onClick={() => setIsModalVisible(true)}
+            title='Введите запрос для генерации логотипа от нейросети.'
+            inputClassName='font-medium'
+            defaultValue={brief.prompt}
+            {...register('prompt')}
+          />
+        </form>
+      </BriefStep>
+      <ModalBase
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+      >
+        <form onSubmit={handleSubmit(generateImages)} className='flex w-full'>
           <div className='flex max-h-full w-1/2 flex-col overflow-y-auto px-1'>
             <h1 className='text-4xl font-bold'>Задайте запрос нейросети</h1>
             <p className='mt-6 text-xs'>
@@ -90,10 +161,9 @@ export default function BriefStep11() {
             <Input
               inputClassName='font-medium'
               className='mb-6'
+              defaultValue={brief.prompt}
               autoFocus
-              {...register('prompt', {
-                required: true,
-              })}
+              {...register('prompt')}
             />
             <Tags tags={tags} />
           </div>
@@ -105,7 +175,7 @@ export default function BriefStep11() {
               <BriefImages />
             </div>
 
-            {selectedBriefImages.length === 4 ? (
+            {selectedBriefImages.length >= 1 ? (
               <Button
                 type='button'
                 onClick={handleFinishModal}
@@ -122,12 +192,12 @@ export default function BriefStep11() {
               >
                 {briefImages.length < MAX_AI_IMAGES
                   ? 'Сгенерировать'
-                  : 'Максимум 8 изображений'}
+                  : 'Максимум 4 изображения'}
               </Button>
             )}
           </div>
-        </Modal>
-      </form>
-    </BriefStep>
+        </form>
+      </ModalBase>
+    </>
   );
 }

@@ -20,12 +20,12 @@ ADD COLUMN     "tags" "Tag"[] DEFAULT ARRAY['CLIENT']::"Tag"[];
 
 -- CreateTable
 CREATE TABLE "Order" (
-    "id" SERIAL NOT NULL,
+    "link" SERIAL NOT NULL,
     "price" TEXT,
     "deadline" TIMESTAMP(3),
     "briefId" INTEGER NOT NULL,
 
-    CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Order_pkey" PRIMARY KEY ("link")
 );
 
 -- CreateTable
@@ -41,10 +41,10 @@ CREATE UNIQUE INDEX "_OrderToUser_AB_unique" ON "_OrderToUser"("A", "B");
 CREATE INDEX "_OrderToUser_B_index" ON "_OrderToUser"("B");
 
 -- AddForeignKey
-ALTER TABLE "Order" ADD CONSTRAINT "Order_briefId_fkey" FOREIGN KEY ("briefId") REFERENCES "Brief"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Order" ADD CONSTRAINT "Order_briefId_fkey" FOREIGN KEY ("briefId") REFERENCES "Brief"("link") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_OrderToUser" ADD CONSTRAINT "_OrderToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Order"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_OrderToUser" ADD CONSTRAINT "_OrderToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Order"("link") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_OrderToUser" ADD CONSTRAINT "_OrderToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_OrderToUser" ADD CONSTRAINT "_OrderToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("link") ON DELETE CASCADE ON UPDATE CASCADE;

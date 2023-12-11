@@ -10,7 +10,7 @@ export default function BriefStep10() {
     <DefaultBriefStep<FormValues>
       stepsLeftText='Осталось 3 шага'
       imageSource='/steps/step10.png'
-      imageClassName='-top-[8rem] -right-[14.5rem] h-auto w-auto'
+      imageClassName='-top-[8rem] -right-[14.5rem] h-auto w-auto sm:scale-[80%] sm:translate-y-[-7.5%]'
       formId='step-10'
       inputTitle='Сколько человек принимает окончательное решение?'
       inputName='endPeople'

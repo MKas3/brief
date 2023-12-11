@@ -1,31 +1,23 @@
-import { authInstance } from '@/services/index';
+import { instance } from '@/services/index';
 import { API_BRIEF_IMAGE_ROUTE } from '@/utils/consts';
+import DefaultQueryService from '@/services/default-query.service';
 
-class BriefImageService {
-  create = async (briefId: number, briefImageData: IBriefImage) => {
-    const { data } = await authInstance.post<IBriefImage>(
-      API_BRIEF_IMAGE_ROUTE + `/${briefId}`,
+class BriefImageService extends DefaultQueryService {
+  create = async (link: string, briefImageData: IBriefImage) => {
+    const { data } = await instance.post<IBriefImage>(
+      API_BRIEF_IMAGE_ROUTE + `?brief=${link}`,
       briefImageData,
     );
     if (!data) throw new Error();
     return data;
   };
 
-  findAll = async (briefId: number) => {
-    const { data } = await authInstance.get<IBriefImage[]>(
-      API_BRIEF_IMAGE_ROUTE + `/brief/${briefId}`,
+  useFindAll = (link: string) =>
+    this.useServiceQuery(
+      ['images', link],
+      API_BRIEF_IMAGE_ROUTE + `/brief?brief=${link}`,
+      'get',
     );
-    if (!data) throw new Error();
-    return data;
-  };
-
-  remove = async (briefImageId: number) => {
-    const { data } = await authInstance.delete<IBriefImage>(
-      API_BRIEF_IMAGE_ROUTE + `/${briefImageId}`,
-    );
-    if (!data) throw new Error();
-    return data;
-  };
 }
 
 export default new BriefImageService();

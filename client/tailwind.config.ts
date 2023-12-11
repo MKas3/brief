@@ -15,6 +15,15 @@ const config: Config = {
     },
   ],
   theme: {
+    screens: {
+      'xl': {'max': '1280px'},
+
+      'lg': {'max': '1024px'},
+
+      'md': {'max': '768px'},
+
+      'sm': {'max': '640px'},
+    },
     extend: {
       translate: {
         'paginate-0': '0',
@@ -65,7 +74,7 @@ const config: Config = {
           from: { transform: 'rotate(45deg) translateY(30rem)' },
           '50%': { transform: 'rotate(45deg) translateY(20rem)' },
           to: { transform: 'rotate(45deg) translateY(30rem)' },
-        },
+        }
       },
       backgroundSize: {
         '200%': '200%',

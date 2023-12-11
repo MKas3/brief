@@ -10,7 +10,7 @@ export default function BriefStep3() {
     <DefaultBriefStep<FormValues>
       stepsLeftText='Осталось 10 шагов'
       imageSource='/steps/step3.png'
-      imageClassName='-top-[13rem] -right-[20rem] h-auto w-auto -scale-x-100'
+      imageClassName='-top-[13rem] -right-[20rem] h-auto w-auto -scale-x-100 sm:translate-y-[10%] sm:scale-[80%]'
       formId='step-3'
       inputTitle='Что означает ваше название?'
       inputName='description'

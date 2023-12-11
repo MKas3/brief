@@ -1,20 +1,39 @@
 'use client';
 
-import { RevealWrapper } from 'next-reveal';
+import { Variants, motion } from 'framer-motion';
 
-type MainRevealWrapperProps = (typeof RevealWrapper)['defaultProps'] & {
+type MainRevealWrapperProps = {
   children: React.ReactNode;
+};
+
+const revealContainer: Variants = {
+  initial: {
+    y: '-15%',
+    opacity: 0,
+  },
+  reveal: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 300,
+      damping: 40
+    },
+  },
 };
 
 export default function MainRevealWrapper({
   children,
-  reset = true,
-  duration = 1000,
   ...otherProps
 }: MainRevealWrapperProps) {
   return (
-    <RevealWrapper reset={reset} duration={duration} {...otherProps}>
+    <motion.div
+      variants={revealContainer}
+      initial='initial'
+      whileInView='reveal'
+      viewport={{ once: true, margin: '-40%' }}
+    >
       {children}
-    </RevealWrapper>
+    </motion.div>
   );
 }

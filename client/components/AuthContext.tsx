@@ -20,19 +20,24 @@ export default function AuthContext({
   const [user, setUser] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     const setUserData = async () => {
       const userData = await AuthService.auth();
       if (userData) setUser(userData);
-      else if (redirectOnNotAuth) router.push(LOGIN_ROUTE);
+      else if (redirectOnNotAuth) setRedirect(true);
     };
     setUserData()
-      .catch((e) => redirectOnNotAuth && router.push(LOGIN_ROUTE))
+      .catch((e) => redirectOnNotAuth && setRedirect(true))
       .finally(() => setIsLoading(false));
   }, [redirectOnNotAuth, router, setUser, setIsLoading]);
 
-  if (isLoading) return <Loading />;
+  useEffect(() => {
+    if (redirect) router.push(LOGIN_ROUTE);
+  }, [redirect, router]);
+
+  if (isLoading || redirect) return <Loading />;
 
   return <>{children}</>;
 }

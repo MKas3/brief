@@ -10,7 +10,7 @@ export default function BriefStep2() {
     <DefaultBriefStep<FormValues>
       stepsLeftText='Осталось 11 шагов'
       imageSource='/steps/step2.png'
-      imageClassName='-top-[13rem] -right-[20rem] h-auto w-auto -scale-x-100'
+      imageClassName='-top-[13rem] -right-[20rem] h-auto w-auto -scale-x-100 sm:translate-y-[10%]'
       formId='step-2'
       inputTitle='Чем занимается ваша компания?'
       inputName='companyClasses'

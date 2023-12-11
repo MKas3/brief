@@ -12,13 +12,15 @@ export class BriefImageService {
     private readonly userService: UserService,
   ) {}
 
-  async create(
-    userId: number,
-    briefId: number,
-    createBriefImageDto: CreateBriefImageDto,
-  ) {
-    if (!(await this.userService.hasBrief(userId, briefId)))
-      throw new BadRequestException();
+  async create(briefId: number, createBriefImageDto: CreateBriefImageDto) {
+    const brief = await this.prisma.brief.findUnique({
+      where: {
+        id: briefId,
+      },
+    });
+
+    if (!brief) throw new BadRequestException();
+
     return this.prisma.briefImage.create({
       data: {
         briefId,
@@ -43,10 +45,22 @@ export class BriefImageService {
     });
   }
 
-  findAllByBrief(briefId: number) {
+  findAllByWhere(where?: Prisma.BriefImageWhereInput) {
+    return this.prisma.briefImage.findMany({
+      where,
+    });
+  }
+
+  async findAllByBrief(where: Prisma.BriefWhereUniqueInput) {
+    const brief = await this.prisma.brief.findUnique({
+      where,
+    });
+
+    if (!brief) throw new BadRequestException();
+
     return this.prisma.briefImage.findMany({
       where: {
-        briefId,
+        briefId: brief.id,
       },
     });
   }

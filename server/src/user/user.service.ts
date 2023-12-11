@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -35,7 +35,15 @@ export class UserService {
 
     const { id, email, name, role } = user;
     const token = this.jwtService.sign({ id, email, role, name });
-    return { email, id, token, name, role };
+    return {
+      email,
+      id,
+      token,
+      name,
+      role,
+      avatar: user.avatar,
+      isGoogle: user.isGoogle,
+    };
   }
 
   async createByGoogle(userData: CreateUserGoogleDto) {
@@ -43,7 +51,7 @@ export class UserService {
     return await this.create({
       email: data.email,
       name: data.name,
-      avatar: data.picture,
+      avatar: data.avatar,
       password: 'no',
       role: 'USER',
       isGoogle: true,
@@ -58,7 +66,7 @@ export class UserService {
         headers: { Authorization: `Bearer ${googleData.token}` },
       },
     );
-    return data as { email: string; name: string; picture: string };
+    return { email: data.email, name: data.name, avatar: data.picture };
   }
 
   async findAll(
@@ -74,28 +82,68 @@ export class UserService {
       cursor,
       where,
       orderBy,
-    });
+    }) as unknown as {
+      id: number;
+      email: string;
+      name: string;
+      avatar: string;
+      role: Role;
+      isGoogle: boolean;
+    }[];
   }
 
-  async find(where: Prisma.UserWhereUniqueInput) {
-    return this.prisma.user.findUnique({
-      where,
-    });
-  }
-
-  async findOne(where: Prisma.UserWhereUniqueInput) {
-    const candidate = await this.prisma.user.findUnique({
+  async findOne(where: Prisma.UserWhereInput) {
+    const candidate = await this.prisma.user.findFirst({
       where,
     });
     if (!candidate) throw new BadRequestException();
     return candidate;
   }
 
-  update(where: Prisma.UserWhereUniqueInput, data: UpdateUserDto) {
-    return this.prisma.user.update({
-      data,
+  async findByBrief(briefId: number) {
+    return (await this.findOne({
+      briefs: {
+        some: {
+          id: briefId,
+        },
+      },
+    })) as {
+      id: number;
+      email: string;
+      name: string;
+      avatar: string;
+      role: Role;
+      isGoogle: boolean;
+    };
+  }
+
+  async update(where: Prisma.UserWhereUniqueInput, data: UpdateUserDto) {
+    const { password, ...otherData } = data;
+    const hashPassword = await argon2.hash(password);
+
+    const updateData = await this.prisma.user.update({
+      data: {
+        password: hashPassword,
+        ...otherData,
+      },
       where,
     });
+
+    const token = this.jwtService.sign({
+      id: updateData.id,
+      email: updateData.email,
+      role: updateData.role,
+      name: updateData.name,
+    });
+
+    return {
+      email: updateData.email,
+      id: updateData.id,
+      token: token,
+      name: updateData.name,
+      role: updateData.role,
+      avatar: updateData.avatar,
+    };
   }
 
   remove(where: Prisma.UserWhereUniqueInput) {
@@ -129,20 +177,6 @@ export class UserService {
                 id: briefImageId,
               },
             },
-          },
-        },
-      },
-    });
-    return candidate !== null;
-  }
-
-  async hasOrder(userId: number, orderId: number) {
-    const candidate = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-        orders: {
-          some: {
-            id: orderId,
           },
         },
       },

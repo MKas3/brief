@@ -14,13 +14,14 @@ model User {
   name     String
   avatar   String?
   role     Role    @default(USER)
-  orders   Order[]
   briefs   Brief[]
   isGoogle Boolean @default(false)
 }
 
 model Brief {
   id                  Int          @id @default(autoincrement())
+  clientEmail         String?
+  clientName          String?
   title               String?
   companyClasses      String?
   description         String?
@@ -33,28 +34,25 @@ model Brief {
   experiments         Int?
   endPeople           Int?
   lastAction          Int?
-  images              BriefImage[]
+  prompt              String?
+  incorrect           Boolean[]
+  incorrectMessage    String?
+  progress            Progress @default(PENDING)
+  doneDate            DateTime?
+  images              BriefImage[] @relation(name: "images")
+  selectedImages      BriefImage[] @relation(name: "selectedImages")
   author              User         @relation(fields: [userId], references: [id])
   userId              Int
-  Order               Order[]
-}
-
-model Order {
-  id       Int       @id() @default(autoincrement())
-  executor User?     @relation(fields: [userId], references: [id])
-  price    Price
-  deadline DateTime?
-  progress Progress  @default(PENDING)
-  brief    Brief     @relation(fields: [briefId], references: [id])
-  briefId  Int
-  userId   Int?
+  completed           Boolean      @default(false)
 }
 
 model BriefImage {
-  id      Int    @id @default(autoincrement())
-  path    String
-  brief   Brief? @relation(fields: [briefId], references: [id])
-  briefId Int?
+  id              Int    @id @default(autoincrement())
+  path            String
+  link            Brief? @relation(fields: [briefId], references: [id], name: "images")
+  briefSelected   Brief? @relation(fields: [briefSelectedId], references: [id], name: "selectedImages", map: "selectedImages")
+  briefId         Int?
+  briefSelectedId Int?
 }
 
 enum Role {

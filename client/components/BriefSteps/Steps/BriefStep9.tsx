@@ -10,9 +10,9 @@ export default function BriefStep9() {
     <DefaultBriefStep<FormValues>
       stepsLeftText='Осталось 4 шага'
       imageSource='/steps/step9.png'
-      imageClassName='-top-[12.5rem] -right-[22.5rem] h-auto w-auto -scale-x-100'
+      imageClassName='-top-[12.5rem] -right-[22.5rem] h-auto w-auto -scale-x-100 sm:translate-y-[12.5%] sm:scale-95'
       formId='step-9'
-      inputTitle='Оцените свою готовность к экспериментам и смелым, нестандартным решениям от 1 до 10?'
+      inputTitle='Оцените свою готовность к экспериментам, нестандартным решениям от 1 до 10?'
       inputName='experiments'
       inputType='number'
       inputRules={{

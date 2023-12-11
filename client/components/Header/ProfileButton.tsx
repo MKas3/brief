@@ -7,8 +7,14 @@ import { HOME_ROUTE, PROFILE_ROUTE } from '@/utils/consts';
 import AuthService from '@/services/auth.service';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { useEffect, useState } from "react";
 
-export function ProfileButton() {
+type ProfileButtonProps = {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}
+
+export function ProfileButton({ open, setOpen }: ProfileButtonProps) {
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
 
@@ -16,19 +22,19 @@ export function ProfileButton() {
     AuthService.logout();
     setUser(null);
     router.push(HOME_ROUTE);
-    toast.success('Come back soon');
+    toast.success('Возвращайтесь скорее!');
   };
 
   return (
     <Menu as='div' className='relative flex items-center text-left'>
-      {({ open }) => (
+      {({ }) => (
         <>
-          <Menu.Button className='my-auto'>
-            <div className='flex cursor-pointer items-center gap-x-2 text-sm text-white transition hover:text-zinc-400'>
+          <Menu.Button onClick={() => setOpen(!open)} className='my-auto'>
+            <div className='flex cursor-pointer items-center gap-x-2 text-sm text-white transition hover:text-zinc-300'>
               <div className='rounded-full border-[1px] border-zinc-900'>
                 <RiAccountCircleLine className='text-3xl' />
               </div>
-              <p>{user?.name}</p>
+              <p className='sm:hidden'>{user?.name}</p>
             </div>
           </Menu.Button>
           <Transition
@@ -42,7 +48,7 @@ export function ProfileButton() {
           >
             <Menu.Items
               static
-              className='absolute right-0 mt-5 flex w-fit origin-top-right flex-col items-center rounded-xl bg-white p-3 text-black shadow-sm shadow-neutral-800/75 focus:outline-none'
+              className='absolute sm:right-[-40px] right-0 mt-5 flex w-fit origin-top-right flex-col items-center rounded-xl bg-white p-3 text-black shadow-sm shadow-neutral-800/75 focus:outline-none'
             >
               <Menu.Item>
                 {({ active }) => (

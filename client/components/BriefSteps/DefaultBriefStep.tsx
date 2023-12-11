@@ -4,7 +4,13 @@ import React, { HTMLInputTypeAttribute, useContext } from 'react';
 import { BriefContext } from '@/components/Brief/BriefContext';
 import { BriefStepContext } from '@/components/BriefSteps/BriefStepContext';
 import { FieldValues, Path, RegisterOptions, useForm } from 'react-hook-form';
-import BriefService from '@/services/brief.service';
+import { useRecoilState } from 'recoil';
+import {
+  briefLinkState,
+  newBriefState,
+  nextBriefEditingPageState,
+} from '@/store/brief.recoil';
+import { IRequestBrief, IResponseBrief } from '@/types/brief.types';
 
 type DefaultBriefStepProps<FormValues extends FieldValues> = BriefStepProps & {
   formId: string;
@@ -28,12 +34,26 @@ export default function DefaultBriefStep<FormValues extends FieldValues>({
   actionNumber,
   ...otherProps
 }: DefaultBriefStepProps<FormValues>) {
+  const [link] = useRecoilState(briefLinkState);
   const [brief] = useContext(BriefContext);
   const [page, setPage] = useContext(BriefStepContext);
   const { register, handleSubmit } = useForm<FormValues>();
+  const [, setNewBrief] = useRecoilState(newBriefState);
+  const [nextBriefEditingPage, setNextBriefEditingPage] = useRecoilState(
+    nextBriefEditingPageState,
+  );
 
   const handleChange = async (data: FormValues) => {
-    await BriefService.update(brief.id, { ...data, lastAction: actionNumber });
+    const incorrect = brief.incorrect?.map((el, index) =>
+      actionNumber === index + 1 ? false : el,
+    );
+    setNextBriefEditingPage(undefined);
+    setNewBrief((prev: IRequestBrief) => ({
+      ...prev,
+      ...data,
+      lastAction: actionNumber,
+      ...(incorrect && incorrect.length > 0 ? { incorrect } : null),
+    }));
     setPage((prev) => prev + 1);
   };
 
@@ -43,6 +63,7 @@ export default function DefaultBriefStep<FormValues extends FieldValues>({
         <Input
           type={inputType}
           title={inputTitle}
+          autoFocus
           defaultValue={brief[inputName]?.toString()}
           {...register(inputName, {
             required: true,

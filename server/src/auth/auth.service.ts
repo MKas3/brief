@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
@@ -9,13 +13,13 @@ import { CreateUserGoogleDto } from '../user/dto/create-user-google.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async validateUser(userData: Prisma.UserWhereUniqueInput) {
     const { email, password } = userData;
-    const user = await this.userService.find({
+    const user = await this.userService.findOne({
       email,
     });
     if (user && (await argon2.verify(user.password, password as string))) {
@@ -27,6 +31,15 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const { id, email, role, name, isGoogle = false } = loginDto;
+    const candidate = await this.userService.findOne({
+      id,
+      email,
+      role,
+      name,
+    });
+
+    if (!candidate) throw new BadRequestException();
+
     return {
       id,
       email,
@@ -39,6 +52,7 @@ export class AuthService {
         isGoogle,
       }),
       role,
+      avatar: candidate.avatar,
     };
   }
 

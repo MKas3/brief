@@ -23,4 +23,4 @@ ADD COLUMN     "price" "Price" NOT NULL;
 DROP TABLE "_OrderToUser";
 
 -- AddForeignKey
-ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("link") ON DELETE SET NULL ON UPDATE CASCADE;

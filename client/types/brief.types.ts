@@ -1,4 +1,11 @@
-interface IRequestBrief {
+import { Progress } from "@/types/progress.types";
+
+export interface IRequestBrief {
+  id?: number;
+  userId?: number;
+  clientEmail?: string;
+  clientName?: string;
+  completed?: boolean;
   title?: string;
   companyClasses?: string;
   description?: string;
@@ -11,11 +18,23 @@ interface IRequestBrief {
   experiments?: number;
   endPeople?: number;
   lastAction?: number;
+  prompt?: string;
+  incorrect?: boolean[];
+  incorrectMessage?: string;
+  progress?: Progress;
+  doneDate?: string;
   images?: IBriefImage[];
+  selectedImages?: IBriefImage[];
 }
 
-interface IResponseBrief extends IRequestBrief {
+export interface IResponseBrief extends IRequestBrief {
   id: number;
   userId: number;
   images: IBriefImage[];
+}
+
+export interface IClient {
+  title: string;
+  clientName: string;
+  clientEmail: string;
 }

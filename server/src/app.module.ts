@@ -6,7 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { BriefModule } from './brief/brief.module';
 import { BriefImageModule } from './brief-image/brief-image.module';
-import { OrderModule } from './order/order.module';
+import { CryptoService } from './crypto/crypto.service';
+import { CryptoModule } from './crypto/crypto.module';
 
 @Module({
   imports: [
@@ -15,9 +16,9 @@ import { OrderModule } from './order/order.module';
     ConfigModule.forRoot({ isGlobal: true }),
     BriefModule,
     BriefImageModule,
-    OrderModule,
+    CryptoModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CryptoService],
 })
 export class AppModule {}

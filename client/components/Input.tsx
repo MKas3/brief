@@ -1,4 +1,9 @@
-import { ForwardedRef, forwardRef, InputHTMLAttributes } from 'react';
+import {
+  ForwardedRef,
+  forwardRef,
+  InputHTMLAttributes,
+  MouseEventHandler,
+} from 'react';
 
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   children?: React.ReactNode;
@@ -8,6 +13,7 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   titleClassName?: string;
   blockClassName?: string;
   inputClassName?: string;
+  onBlockClick?: MouseEventHandler;
 };
 
 export const Input = forwardRef(function Input(
@@ -19,6 +25,7 @@ export const Input = forwardRef(function Input(
     titleClassName,
     blockClassName,
     inputClassName,
+    onBlockClick,
     ...otherProps
   }: InputProps,
   ref: ForwardedRef<HTMLInputElement>,
@@ -30,19 +37,22 @@ export const Input = forwardRef(function Input(
           className={
             titleClassName
               ? `${titleClassName} `
-              : 'text-center text-xl font-medium'
+              : 'text-center text-xl sm:text-lg font-medium'
           }
         >
           {title}
         </p>
       )}
-      <div className={blockClassName ? `${blockClassName} ` : 'mt-6'}>
+      <div
+        className={blockClassName ? `${blockClassName} ` : 'mt-6 sm:mt-2'}
+        onClick={onBlockClick}
+      >
         <input
           ref={ref}
           type={type}
           className={
             (inputClassName ? `${inputClassName} ` : '') +
-            'w-full rounded-xl border-2 border-zinc-300 px-2 py-3 text-black outline-none transition placeholder:text-zinc-600 focus:outline-zinc-800'
+            'w-full rounded-xl sm:rounded-2xl border-2 border-zinc-300 px-2 py-3 text-black outline-none transition placeholder:text-zinc-600 focus:outline-zinc-800'
           }
           {...otherProps}
         />
