@@ -19,6 +19,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { BriefAuthorGuard } from '../guards/brief-author.guard';
 import { CreateBriefImageDto } from '../brief-image/dto/create-brief-image.dto';
 import { BriefLinkGuard } from './guards/brief-link.guard';
+import { RoleGuard } from '../guards/role.guard';
+import { $Enums } from '@prisma/client';
 
 @Controller('brief')
 export class BriefController {
@@ -33,6 +35,18 @@ export class BriefController {
   ) {
     return this.briefService.findAll(+skip, +take, {
       userId: +req.user.id,
+    });
+  }
+
+  @Get('user/:id')
+  @UseGuards(JwtAuthGuard, UserExistenceGuard, new RoleGuard($Enums.Role.ADMIN))
+  findAllByUser(
+    @Query('take') take: string = '0',
+    @Query('skip') skip: string = '3',
+    @Param('id') userId: string = '-1',
+  ) {
+    return this.briefService.findAll(+skip, +take, {
+      userId: +userId,
     });
   }
 
@@ -97,6 +111,12 @@ export class BriefController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard, UserExistenceGuard, BriefAuthorGuard)
   remove(@Param('id') id: string) {
+    return this.briefService.remove({ id: +id });
+  }
+
+  @Delete('admin/:id')
+  @UseGuards(JwtAuthGuard, UserExistenceGuard, new RoleGuard($Enums.Role.ADMIN))
+  removeAdmin(@Param('id') id: string) {
     return this.briefService.remove({ id: +id });
   }
 

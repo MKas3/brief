@@ -25,6 +25,8 @@ import {
   Variants,
 } from 'framer-motion';
 import { BurgerButton } from '@/components/Header/BurgerButton';
+import { FiLogIn } from "react-icons/fi";
+import { FaPlus } from "react-icons/fa6";
 
 const header: Variants = {
   normal: {
@@ -73,15 +75,15 @@ export function Header() {
           : !isAuthPage
           ? 'bg-neutral-900 py-4  '
           : 'py-4 ') +
-        'fixed top-0 z-30 flex w-full max-w-[100vw] justify-between px-[10vw] transition-all duration-300'
+        'fixed top-0 text-white z-30 flex w-full gap-x-8 max-w-[100vw] justify-between px-[10vw] transition-all duration-300'
       }
       variants={header}
       animate={isHeaderAlt ? 'alt' : 'normal'}
     >
       <HeaderLogo visible={isHomePage || isAuthPage} />
-      <div className='flex items-center gap-x-8 sm:gap-x-0'>
+      <div className='flex items-center gap-x-8 md:gap-x-0'>
         {isHomePage && (
-          <div className='flex items-center gap-x-8 sm:hidden'>
+          <div className='flex items-center gap-x-8 lg:gap-x-4 md:hidden'>
             <HeaderLink isSectionLink={isHomePage} href={HOME_SECTION_ROUTE}>
               Главная
             </HeaderLink>
@@ -97,18 +99,20 @@ export function Header() {
           (user ? (
             <ProfileButton open={open} setOpen={setOpen} />
           ) : (
-            <div className='flex rounded-full border-2 border-zinc-300 text-sm'>
+            <div className='flex rounded-full border-2 border-zinc-300 text-sm max-w-[25vw]'>
               <HeaderLink
                 href={LOGIN_ROUTE}
                 className='rounded-full py-[0.4rem] pl-3 pr-2 transition hover:text-zinc-300'
               >
-                Вход
+                <span className='sm:hidden'>Вход</span>
+                <FiLogIn className='hidden sm:block' />
               </HeaderLink>
               <HeaderLink
                 href={REGISTRATION_ROUTE}
                 className='rounded-full bg-zinc-300 px-3 py-[0.4rem] text-black transition hover:bg-zinc-100'
               >
-                Регистрация
+                <span className='sm:hidden'>Регистрация</span>
+                <FaPlus className='hidden sm:block' />
               </HeaderLink>
             </div>
           ))}

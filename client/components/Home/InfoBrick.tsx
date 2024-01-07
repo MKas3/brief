@@ -22,7 +22,7 @@ export default function InfoBrick({
       <motion.div
         initial='initial'
         whileHover='hover'
-        className='flex flex-col items-center rounded-3xl bg-white px-8 py-6 shadow-lg shadow-black/25'
+        className='flex flex-col items-center overflow-hidden rounded-3xl bg-white px-8 h-full justify-center shadow-lg shadow-black/25'
       >
         <div className='flex'>{icon}</div>
         <div className='flex font-semibold whitespace-nowrap'>{firstTitle}</div>

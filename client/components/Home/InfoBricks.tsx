@@ -8,7 +8,7 @@ import InfoBricksRevealWrapper from '@/components/Home/InfoBricksRevealWrapper';
 export function InfoBricks() {
   return (
     <InfoBricksRevealWrapper>
-      <div className='absolute -top-10 left-0 right-0 mx-[10vw] grid grid-cols-4 sm:grid-cols-2 sm:grid-rows-2 sm:gap-y-8 sm:gap-x-8 gap-x-8 h-full'>
+      <div className='absolute -top-10 left-0 right-0 mx-[10vw] grid grid-cols-4 md:grid-cols-2 md:grid-rows-2 md:gap-y-8 md:gap-x-8 gap-x-8 h-full'>
         <InfoBrick
           icon={<LuTimerReset size={65} />}
           firstTitle='Скорость'

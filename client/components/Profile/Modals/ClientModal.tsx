@@ -67,7 +67,7 @@ export const ClientModal = ({
           <HiOutlineArrowPath color='gray' size='1.75rem' />
         </button>
       </div>
-      <div className='flex'>
+      <div className='flex sm:flex-col sm:gap-y-6'>
         <div className='flex flex-col gap-y-6'>
           <ModalLabel
             labelDigit='2'
@@ -80,7 +80,7 @@ export const ClientModal = ({
             description='Ты получишь сборный бриф со всеми требованиями по предстоящей работе с демонстрационным вариантом логотипа.'
           />
         </div>
-        <div className='flex w-1/3 items-center justify-center'>
+        <div className='flex w-1/3 sm:w-full items-center justify-center'>
           <QRCodeSVG value={briefLink} />
         </div>
       </div>

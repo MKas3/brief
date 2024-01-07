@@ -22,6 +22,7 @@ type BriefModalProps = {
   onCompleteBrief: (brief: IResponseBrief) => void;
   brief?: IResponseBrief;
   isIncorrectMode?: boolean;
+  hasCompleteButton?: boolean;
 };
 
 export const BriefModal = ({
@@ -30,6 +31,7 @@ export const BriefModal = ({
   onCompleteBrief,
   brief,
   isIncorrectMode = false,
+  hasCompleteButton = true,
 }: BriefModalProps) => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [briefs, setBriefs] = useRecoilState(briefsState);
@@ -92,14 +94,14 @@ export const BriefModal = ({
       visible={visible}
       onClose={onClose}
       title={
-        <div className='mb-6 flex items-baseline gap-x-6 border-b border-[#cccccc] pb-6'>
+        <div className='mb-6 text-black flex items-baseline gap-x-6 border-b border-[#cccccc] pb-6'>
           <h1 className='text-5xl font-bold'>Бриф от:</h1>
           <p className='text-xl font-bold'>ФИО: {brief?.clientName}</p>
           <p className='text-xl font-bold'>Email: {brief?.clientEmail}</p>
         </div>
       }
     >
-      <div className='flex flex-col gap-y-6'>
+      <div className='flex text-black flex-col gap-y-6'>
         <p className='text-2xl font-bold'>
           Поставь точку рядом с пунктом, если в нём допущена ошибка
         </p>
@@ -234,6 +236,7 @@ export const BriefModal = ({
               : 'Начать работу'
           }
           prev='Назад'
+          isNextHidden={!hasCompleteButton}
           isNextActive
           isPrevActive
           onNextClick={completeClick}

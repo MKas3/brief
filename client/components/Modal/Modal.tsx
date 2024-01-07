@@ -21,7 +21,7 @@ export const Modal = ({
         {title ? (
           title
         ) : titleText ? (
-          <h1 className='mb-6 text-5xl font-bold'>{titleText}</h1>
+          <h1 className='mb-6 text-5xl font-bold md:text-3xl sm:text-2xl'>{titleText}</h1>
         ) : null}
         {children}
       </div>

@@ -25,7 +25,7 @@ export default function BriefsContainer({
         {briefs.slice(0, maxBriefs).map((el, index) => (
           <span
             key={index}
-            className={`flex h-8 select-none items-center border-b border-[#cccccc] ${!el.title && 'text-neutral-400'}`}
+            className={`flex h-8 select-none items-center sm:text-sm border-b border-[#cccccc] ${!el.title && 'text-neutral-400'}`}
           >
             {
               `${index + 1}. ${el.title ? el.title : 'В процессе заполнения'}`

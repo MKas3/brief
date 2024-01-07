@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
   UsePipes,
@@ -39,8 +40,8 @@ export class UserController {
 
   @Get()
   @UseGuards(JwtAuthGuard, UserExistenceGuard, new RoleGuard($Enums.Role.ADMIN))
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Query('skip') skip = '0', @Query('take') take = '3') {
+    return this.userService.findAll(+skip, +take);
   }
 
   @Get(':id')
@@ -56,8 +57,8 @@ export class UserController {
     return this.userService.update({ id: +req.user.id }, updateUserDto);
   }
 
-  @Delete(':link')
-  @UseGuards(JwtAuthGuard, UserExistenceGuard, UserAuthorGuard)
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, UserExistenceGuard, new RoleGuard($Enums.Role.ADMIN))
   remove(@Param('id') id: string) {
     return this.userService.remove({ id: +id });
   }

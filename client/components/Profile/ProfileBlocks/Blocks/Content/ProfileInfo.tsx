@@ -66,7 +66,7 @@ export const ProfileInfo = ({ user, setUser }: ProfileInfoProps) => {
           type='submit'
           className='btn profile absolute bottom-0 left-0 right-0 mb-5 mt-5'
         >
-          Сохранить изменения
+          Сохранить
         </button>
       </form>
     </div>

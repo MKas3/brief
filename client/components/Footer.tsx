@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import { BiLogoVisa } from 'react-icons/bi';
+import { CONTACTS_SECTION_ROUTE } from "@/utils/consts";
 
 export default function Footer() {
   return (
     <footer
-      id='contacts'
-      className='relative z-30 w-full bg-neutral-900 px-[10%] py-0.5'
+      id={CONTACTS_SECTION_ROUTE}
+      className='relative text-white z-30 w-full bg-neutral-900 px-[10%] py-0.5'
     >
       <div className='flex items-center justify-between py-2 text-xl sm:text-sm font-semibold'>
         <span className='text-sm sm:text-[0.625rem] sm:leading-3 font-normal'>© BriefMe Company</span>

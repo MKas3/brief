@@ -39,7 +39,8 @@ const montserrat = localFont({
 
 export const metadata: Metadata = {
   title: 'BriefMe',
-  description: 'Easier Brief'
+  description: 'Easier Brief',
+  viewport: 'width=device-width,initial-scale=1',
 };
 
 export default function RootLayout({
@@ -53,7 +54,7 @@ export default function RootLayout({
         <StoreRoot>
           <AuthContext>
             <Header />
-            <main className='min-h-screen bg-neutral-900 text-white w-full max-w-full'>{children}</main>
+            <main className='min-h-screen min-w-[300px] bg-neutral-900 text-white w-full max-w-full overflow-x-hidden'>{children}</main>
             <Footer />
             <ToastContainer position='bottom-left' theme='dark' />
           </AuthContext>

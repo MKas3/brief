@@ -2,23 +2,24 @@ import { HomeMainBlock } from '@/components/Home/HomeMainBlock';
 import AnimatedStripes from '@/components/Home/AnimatedStripes';
 import InfoBlock from '@/components/Home/InfoBlock';
 import { InfoBricks } from '@/components/Home/InfoBricks';
+import { ABOUT_SECTION_ROUTE, HOME_SECTION_ROUTE } from "@/utils/consts";
 
 export default function Home() {
   return (
-    <div>
+    <div className='overflow-hidden'>
       <section
-        id='home'
+        id={HOME_SECTION_ROUTE}
         className='flex h-screen bg-gradient-to-tl from-black from-30% to-neutral-800'
       >
         <HomeMainBlock />
         <AnimatedStripes />
       </section>
       <div className='bg-white'>
-        <div className='relative z-20 h-[20vh] sm:h-[40vh]'>
+        <div className='relative z-20 h-[27.5vh] md:h-[55vh]'>
           <InfoBricks />
         </div>
 
-        <section id='about' className='pb-20 sm:pb-0 flex flex-col gap-y-16 sm:gap-y-0'>
+        <section id={ABOUT_SECTION_ROUTE} className='pb-20 sm:pb-0 flex flex-col gap-y-16 sm:gap-y-0'>
           <InfoBlock
             title='Как работает BriefMe'
             imagePath='/info/info1.png'

@@ -25,7 +25,7 @@ export const ProfileBlockWrapper = ({
   return (
     <motion.div
       ref={ref}
-      className='grid w-full grid-cols-2 grid-rows-2 gap-x-12 gap-y-4'
+      className='grid w-full grid-cols-2 grid-rows-2 sm:grid-rows-4 sm:grid-cols-1 gap-y-4 gap-x-[3vw]'
       layout='position'
       {...props}
     />

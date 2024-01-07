@@ -16,9 +16,9 @@ export const FAQModal = ({ visible, onClose }: FAQModalProps) => {
       visible={visible}
       onClose={onClose}
       title={
-        <div className='mb-6 flex items-baseline gap-x-4 border-b border-[#cccccc] pb-6'>
-          <h1 className='text-5xl font-bold'>FAQ:</h1>
-          <p className='text-3xl font-medium'>
+        <div className='mb-6 md:mb-4 flex items-baseline gap-x-4 border-b border-[#cccccc] md:pb-4 pb-6'>
+          <h1 className='text-5xl font-bold md:text-3xl'>FAQ:</h1>
+          <p className='text-3xl font-medium md:text-xl'>
             Ответы и идеи от команды BriefMe
           </p>
         </div>
@@ -32,7 +32,7 @@ export const FAQModal = ({ visible, onClose }: FAQModalProps) => {
         />
         <div className='flex gap-x-10'>
           <ModalLabel labelDigit='2' title='Как работать с BriefMe?'>
-            <div className='flex flex-col gap-y-4 text-lg font-medium'>
+            <div className='flex flex-col gap-y-4 text-lg font-medium md:text-base'>
               <span>
                 Вся работа начинается с исполнителя, которому необходимо нажать
                 кнопку “Создать бриф” в своем личном кабинете.
@@ -80,7 +80,7 @@ export const FAQModal = ({ visible, onClose }: FAQModalProps) => {
           </div>
         </div>
         <ModalLabel labelDigit='3' title='Почему нужно пользоваться BriefMe?'>
-          <div className='flex flex-col gap-y-4 text-lg font-medium'>
+          <div className='flex flex-col gap-y-4 text-lg font-medium md:text-base'>
             <span>
               А все просто, BriefMe спасает вас от самого главного, а именно от
               безрезультативных переговоров с заказчиком. Вы даете бриф,

@@ -6,6 +6,7 @@ type HeaderLinkProps = {
   href: string;
   className?: string;
   isSectionLink?: boolean;
+  onClick?: () => void;
 };
 
 export function HeaderLink({
@@ -13,8 +14,10 @@ export function HeaderLink({
   href,
   className,
   isSectionLink,
+  onClick,
 }: HeaderLinkProps) {
   const handleSectionHref = (href: string) => {
+    if (onClick) onClick();
     document.getElementById(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -25,7 +28,8 @@ export function HeaderLink({
           className={
             className
               ? `${className}`
-              : '' + 'text-sm text-white transition hover:text-zinc-300'
+              : '' +
+                'whitespace-nowrap text-sm text-white transition hover:text-zinc-300'
           }
           onClick={() => handleSectionHref(href)}
         >
@@ -36,9 +40,11 @@ export function HeaderLink({
           className={
             className
               ? `${className}`
-              : '' + 'text-sm text-white transition hover:text-zinc-300'
+              : '' +
+                'whitespace-nowrap text-sm text-white transition hover:text-zinc-300'
           }
           href={href}
+          onClick={onClick}
         >
           {children}
         </Link>

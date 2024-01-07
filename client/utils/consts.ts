@@ -1,5 +1,6 @@
 export const HOME_ROUTE = '/';
 export const PROFILE_ROUTE = '/profile';
+export const ADMIN_ROUTE = '/admin';
 export const LOGIN_ROUTE = '/auth/login';
 export const REGISTRATION_ROUTE = '/auth/registration';
 export const BRIEFS_ROUTE = '/brief';

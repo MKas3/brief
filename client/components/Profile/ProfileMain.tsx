@@ -38,6 +38,7 @@ import { BriefModal } from '@/components/Profile/Modals/BriefModal/BriefModal';
 import { BriefsModal } from '@/components/Profile/Modals/BriefsModal/BriefsModal';
 import { Progress } from '@/types/progress.types';
 import { IResponseBrief } from '@/types/brief.types';
+import { FiPlus } from 'react-icons/fi';
 
 export default function ProfileMain() {
   const [user, setUser] = useRecoilState(userState);
@@ -58,12 +59,8 @@ export default function ProfileMain() {
   const [copyClicked, setCopyClicked] = useState(false);
   const [clientModalOpen, setClientModalOpen] = useState(false);
   const router = useRouter();
-  const {
-    refetch: refetchLink,
-  } = BriefService.useGenerateLink();
-  const {
-    refetch: refetchLastLink,
-  } = BriefService.useFindLastLink();
+  const { refetch: refetchLink } = BriefService.useGenerateLink();
+  const { refetch: refetchLastLink } = BriefService.useFindLastLink();
 
   const [faqModalOpen, setFaqModalOpen] = useState(false);
 
@@ -118,7 +115,9 @@ export default function ProfileMain() {
               `${window.location.origin}/brief/` + res.data.data.link,
             );
           else
-            setBriefLink("Нажми кнопку создания ссылки справа, чтобы создать ссылку");
+            setBriefLink(
+              'Нажми кнопку создания ссылки справа, чтобы создать ссылку',
+            );
         });
     },
     [setBriefLink],
@@ -180,27 +179,28 @@ export default function ProfileMain() {
 
   return (
     <>
-      <div className='mb-16 ml-56 mr-56 mt-9 flex flex-col text-neutral-900'>
+      <div className='mx-[15vw] mb-16 mt-9 flex flex-col text-neutral-900 lg:mx-[10vw] md:mx-[5vw]'>
         <div className='w-full'>
-          <div className='flex w-full justify-between rounded-3xl bg-[url("/start.jpg")] bg-cover bg-center px-16 py-6 text-white'>
-            <div className='space-y-2'>
-              <p className='text-sm font-medium'>{currentDate}</p>
-              <h1 className='text-xl font-extrabold'>
+          <div className='flex w-full justify-between gap-x-4 sm:px-[10vw] rounded-3xl bg-[url("/start.jpg")] bg-cover bg-center px-16 py-6 text-white sm:flex-col sm:gap-y-4'>
+            <div className='flex flex-col gap-y-2'>
+              <p className='text-sm font-medium sm:text-xs'>{currentDate}</p>
+              <h1 className='whitespace-nowrap text-xl font-extrabold md:text-lg sm:text-base'>
                 Добрый день, {user?.name}
               </h1>
             </div>
             <button
-              className='rounded-full bg-white px-11 py-4 text-xl font-semibold text-black drop-shadow-[0px_0px_10px_#FFF] transition hover:bg-white/75'
+              className='whitespace-nowrap rounded-full sm:hidden bg-white px-11 py-4 text-xl font-semibold text-black drop-shadow-[0px_0px_10px_#FFF] transition hover:bg-white/75 lg:px-8 lg:py-3 lg:text-lg md:px-5 sm:text-base'
               onClick={addClient}
             >
-              Создать бриф
+              <span className='md:hidden sm:block'>Создать бриф</span>
+              <FiPlus className='hidden md:block sm:hidden' />
             </button>
           </div>
         </div>
-        <div className='mt-3 flex gap-x-12 overflow-hidden drop-shadow-[0px_4px_5px_#999]'>
+        <div className='mt-3 flex gap-x-[3vw] overflow-hidden drop-shadow-[0px_4px_5px_#999]'>
           <div className='flex flex-col items-center justify-center gap-y-3'>
             <span className='text-xs font-medium'>Меню</span>
-            <div className='profile container flex h-full w-48 flex-col'>
+            <div className='profile container flex h-full w-48 flex-col sm:w-36'>
               {pages.map((el, index) => (
                 <button key={index} onClick={() => setPage(index)}>
                   <div
@@ -208,11 +208,15 @@ export default function ProfileMain() {
                       (currentPage === index
                         ? 'font-semibold text-neutral-900 '
                         : 'font-medium text-neutral-500 ') +
-                      'flex w-full items-center gap-x-12 transition hover:text-neutral-700'
+                      'flex w-full items-center gap-x-12 transition hover:text-neutral-700 sm:justify-center'
                     }
                   >
                     <div className='flex items-center gap-x-2 text-lg'>
-                      {currentPage === index ? fillIcons[index] : icons[index]}
+                      <div className='sm:hidden'>
+                        {currentPage === index
+                          ? fillIcons[index]
+                          : icons[index]}
+                      </div>
                       <span className='text-xs'>{el}</span>
                     </div>
                   </div>

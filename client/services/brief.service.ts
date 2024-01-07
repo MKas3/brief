@@ -1,7 +1,7 @@
 import { authInstance, instance } from '@/services/index';
 import { API_BRIEF_ROUTE } from '@/utils/consts';
 import DefaultQueryService from '@/services/default-query.service';
-import { IRequestBrief, IResponseBrief } from "@/types/brief.types";
+import { IRequestBrief, IResponseBrief } from '@/types/brief.types';
 
 class BriefService extends DefaultQueryService {
   constructor() {
@@ -33,7 +33,7 @@ class BriefService extends DefaultQueryService {
     this.useAuthServiceQuery<{ link: string }>(
       'link',
       API_BRIEF_ROUTE + `/link/${briefId}`,
-      'get'
+      'get',
     );
 
   useCheckLink = (link: string) =>
@@ -58,8 +58,8 @@ class BriefService extends DefaultQueryService {
       'updateBrief',
       API_BRIEF_ROUTE + `/${briefId}`,
       'patch',
-      briefData
-    )
+      briefData,
+    );
 
   useUpdateImages = (link: string, selected: IBriefImage[]) =>
     this.useServiceQuery(
@@ -76,6 +76,14 @@ class BriefService extends DefaultQueryService {
     if (!data) throw new Error();
     return data;
   };
+
+  removeAdmin = async (briefId: number) => {
+    const { data } = await authInstance.delete<IResponseBrief>(
+      API_BRIEF_ROUTE + `/admin/${briefId}`,
+    );
+    if (!data) throw new Error();
+    return data;
+  }
 
   findOne = async (briefId: number) => {
     const { data } = await authInstance.get<IResponseBrief>(
@@ -108,6 +116,14 @@ class BriefService extends DefaultQueryService {
     if (!data) throw new Error();
     return data;
   };
+
+  async findAllByUser(skip: number, take: number, userId: number) {
+    const { data } = await authInstance.get<IResponseBrief[]>(
+      API_BRIEF_ROUTE + `/user/${userId}?skip=${skip}&take=${take}`,
+    );
+    if (!data) throw new Error();
+    return data;
+  }
 }
 
 export default new BriefService();

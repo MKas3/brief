@@ -68,7 +68,7 @@ export const ModalBase = forwardRef(function ModalBase(
     >
       <motion.div
         ref={ref}
-        className='absolute inset-0 mx-40 sm:mx-4 my-5 flex justify-center rounded-7xl bg-white p-14 sm:p-6'
+        className='absolute inset-0 mx-40 overflow-x-hidden sm:mx-4 md:mx-6 lg:mx-16 my-5 flex justify-center rounded-7xl bg-white p-14 sm:p-6'
         variants={modal}
         animate={visible ? 'appear' : 'disappear'}
       >
@@ -79,7 +79,7 @@ export const ModalBase = forwardRef(function ModalBase(
         >
           <HiMiniXMark size={30} />
         </button>
-        <div className='flex w-full h-full overflow-y-auto'>{children}</div>
+        <div className='flex w-full h-full overflow-y-auto overflow-x-hidden'>{children}</div>
       </motion.div>
     </motion.div>
   );

@@ -76,6 +76,8 @@ export class UserService {
     where?: Prisma.UserWhereInput,
     orderBy?: Prisma.UserOrderByWithRelationInput,
   ) {
+    if (isNaN(skip) || isNaN(take)) throw new BadRequestException();
+
     return this.prisma.user.findMany({
       skip,
       take,

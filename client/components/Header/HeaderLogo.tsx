@@ -35,7 +35,7 @@ export default function HeaderLogo({ visible }: HeaderLogoProps) {
 
   return (
     <HeaderLink
-      className='flex max-w-[11rem] items-center gap-x-1.5 text-xl font-semibold'
+      className='flex max-w-[11rem] min-w-max items-center gap-x-1.5 text-xl font-semibold'
       href={HOME_ROUTE}
     >
       <motion.div variants={logo} animate={visible ? 'visible' : 'hidden'}>
